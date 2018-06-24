@@ -56,8 +56,8 @@ const UserMenu = (props) => {
   const { user } = { ...props };
   const menu = (
     <Menu>
-      <Menu.Item key="profile">
-        <Link to="/profile">
+      <Menu.Item key="user">
+        <Link to="/user">
           Профиль
         </Link>
       </Menu.Item>

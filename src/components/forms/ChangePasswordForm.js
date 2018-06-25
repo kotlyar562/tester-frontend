@@ -15,9 +15,19 @@ const styles = {
 };
 
 class ChangePasswordForm extends Component {
+  checkAndSubmit = (e) => {
+    const { form, submitForm } = { ...this.props };
+    e.preventDefault();
+    form.validateFields((err, values) => {
+      if (!err) {
+        submitForm(values);
+      }
+    });
+  }
+
   checkPassword = (rule, value, callback) => {
     const { form } = { ...this.props };
-    if (value && value !== form.getFieldValue('password')) {
+    if (value && value !== form.getFieldValue('new_password')) {
       callback('Введенные пароли не совпадают!');
     } else {
       callback();
@@ -25,7 +35,7 @@ class ChangePasswordForm extends Component {
   };
 
   render() {
-    const { form, submitForm, cancelClick } = { ...this.props };
+    const { form, cancelClick } = { ...this.props };
     const { getFieldDecorator } = { ...form };
     const formItemLayout = {
       labelCol: {
@@ -65,7 +75,7 @@ class ChangePasswordForm extends Component {
         </FormItem>
         <FormItem
           {...formItemLayout}
-          label="Повторите новый пароль"
+          label="Повторите пароль"
         >
           {getFieldDecorator('new_password1', {
             rules: [{
@@ -78,7 +88,7 @@ class ChangePasswordForm extends Component {
           )}
         </FormItem>
         <div style={{ marginLeft: '50%' }}>
-          <Button type="primary" htmlType="submit" onClick={submitForm}>
+          <Button type="primary" htmlType="submit" style={{ marginRight: '20px' }} onClick={this.checkAndSubmit}>
             Сохранить
           </Button>
           <Button type="default" onClick={cancelClick}>

@@ -7,7 +7,7 @@ class UserContainer extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      activeSider: 'dashboard',
+      activeSider: '',
       breadcrumbs: [{ text: 'Панель управления', link: '/user' }],
     };
   }

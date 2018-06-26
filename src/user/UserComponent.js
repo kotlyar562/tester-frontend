@@ -9,7 +9,7 @@ import {
 import Footer from '../components/Footer';
 import UserLogin from './UserLogin';
 import UserProfile from './profile/UserProfileContainer';
-
+import UserBases from './bases/UserBasesContainer';
 
 const styles = {
   sidebar: {
@@ -35,6 +35,7 @@ const UserRouter = (props) => {
     <div>
       <Route exact path="/user" render={() => <UserDashboard user={user} />} />
       <Route path="/user/profile" render={() => <UserProfile user={user} />} />
+      <Route path="/user/bases" render={() => <UserBases user={user} />} />
     </div>
   );
 };
@@ -56,7 +57,6 @@ const UserView = (props) => {
         <Menu
           theme="dark"
           mode="inline"
-          defaultSelectedKeys={['dashboard']}
           selectedKeys={[activeSider]}
           style={{ marginTop: 0 }}
           onClick={menuClick}

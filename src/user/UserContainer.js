@@ -7,7 +7,7 @@ class UserContainer extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      activeSider: '',
+      activeSider: 'dashboard',
       breadcrumbs: [{ text: 'Панель управления', link: '/user' }],
     };
   }
@@ -20,9 +20,9 @@ class UserContainer extends Component {
     });
   };
 
-  siderMenuClick = (e) => {
+  changeActiveSider = (value) => {
     this.setState({
-      activeSider: e.key,
+      activeSider: value,
     });
   };
 
@@ -32,7 +32,7 @@ class UserContainer extends Component {
         {user => (
           <UserView
             user={user}
-            menuClick={this.siderMenuClick}
+            changeActiveSider={this.changeActiveSider}
             changeBreadcrumbs={this.changeBreadcrumbs}
             {...this.state}
           />)

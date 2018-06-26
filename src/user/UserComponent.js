@@ -30,12 +30,12 @@ const UserDashboard = () => (
 );
 
 const UserRouter = (props) => {
-  const { user } = { ...props };
+  const { user, changeActiveSider } = { ...props };
   return (
     <div>
-      <Route exact path="/user" render={() => <UserDashboard user={user} />} />
-      <Route path="/user/profile" render={() => <UserProfile user={user} />} />
-      <Route path="/user/bases" render={() => <UserBases user={user} />} />
+      <Route exact path="/user" render={() => <UserDashboard user={user} changeActiveSider={changeActiveSider} />} />
+      <Route path="/user/profile" render={() => <UserProfile user={user} changeActiveSider={changeActiveSider} />} />
+      <Route path="/user/bases" render={() => <UserBases user={user} changeActiveSider={changeActiveSider} />} />
     </div>
   );
 };
@@ -44,7 +44,7 @@ const UserView = (props) => {
   const {
     activeSider,
     user,
-    menuClick,
+    changeActiveSider,
     breadcrumbs,
   } = { ...props };
   return (
@@ -59,7 +59,7 @@ const UserView = (props) => {
           mode="inline"
           selectedKeys={[activeSider]}
           style={{ marginTop: 0 }}
-          onClick={menuClick}
+          onClick={e => changeActiveSider(e.key)}
         >
           <Menu.Item key="dashboard">
             <Link to="/user">
@@ -142,7 +142,8 @@ const UserView = (props) => {
               </Breadcrumb.Item>
             ))}
           </Breadcrumb>
-          {Object.keys(user).length > 0 ? <UserRouter user={user} /> : <UserLogin />}
+          {Object.keys(user).length > 0
+            ? <UserRouter user={user} changeActiveSider={changeActiveSider} /> : <UserLogin />}
           <Footer />
         </Layout.Content>
       </Layout>

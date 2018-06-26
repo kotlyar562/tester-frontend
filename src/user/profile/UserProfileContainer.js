@@ -9,6 +9,11 @@ class UserProfile extends Component {
     };
   }
 
+  componentDidMount() {
+    const { changeActiveSider } = { ...this.props };
+    changeActiveSider('profile');
+  }
+
   showInfoForm = () => {
     this.setState({
       modalOpening: 'infoForm',

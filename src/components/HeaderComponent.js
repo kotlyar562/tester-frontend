@@ -22,36 +22,6 @@ const styles = {
   },
 };
 
-// const HorizontalMenu = (props) => {
-//   const { activeLink } = { ...props };
-//   return (
-//     <Menu
-//       theme="light"
-//       mode="horizontal"
-//       selectedKeys={[activeLink]}
-//       style={styles.menu}
-//     >
-//       <Menu.Item key="home">
-//         Главная
-//       </Menu.Item>
-//       <Menu.Item key="bases">
-//         Базы вопросов
-//       </Menu.Item>
-//       <Menu.Item key="tests">
-//         Пройти тест
-//       </Menu.Item>
-//       <Menu.SubMenu title="Профиль?">
-//         <Menu.Item key="signin">
-//           Вход
-//         </Menu.Item>
-//         <Menu.Item key="signup">
-//           Регистрация
-//         </Menu.Item>
-//       </Menu.SubMenu>
-//     </Menu>
-//   );
-// };
-
 const UserMenu = (props) => {
   const { user } = { ...props };
   const menu = (
@@ -124,7 +94,7 @@ const HeaderComponent = (props) => {
   return (
     <Layout.Header style={styles.header}>
       <div style={styles.userBlock}>
-        {user ? <UserMenu user={user} /> : <UserLogin />}
+        {Object.keys(user).length > 0 ? <UserMenu user={user} /> : <UserLogin />}
       </div>
       {horizontalMenu}
     </Layout.Header>

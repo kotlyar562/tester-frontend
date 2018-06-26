@@ -7,6 +7,8 @@ import {
   Breadcrumb,
 } from 'antd';
 import Footer from '../components/Footer';
+import UserLogin from './UserLogin';
+import UserProfile from './profile/UserProfileContainer';
 
 
 const styles = {
@@ -27,18 +29,15 @@ const UserDashboard = () => (
   </div>
 );
 
-const UserProfile = () => (
-  <div>
-    Profile
-  </div>
-);
-
-const UserRouter = () => (
-  <div>
-    <Route exact path="/user" component={UserDashboard} />
-    <Route path="/user/profile" component={UserProfile} />
-  </div>
-);
+const UserRouter = (props) => {
+  const { user } = { ...props };
+  return (
+    <div>
+      <Route exact path="/user" render={() => <UserDashboard user={user} />} />
+      <Route path="/user/profile" render={() => <UserProfile user={user} />} />
+    </div>
+  );
+};
 
 const UserView = (props) => {
   const {
@@ -143,7 +142,7 @@ const UserView = (props) => {
               </Breadcrumb.Item>
             ))}
           </Breadcrumb>
-          {Object.keys(user).length > 0 ? <UserRouter /> : 'No AUTH!'}
+          {Object.keys(user).length > 0 ? <UserRouter user={user} /> : <UserLogin />}
           <Footer />
         </Layout.Content>
       </Layout>

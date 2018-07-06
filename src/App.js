@@ -1,31 +1,44 @@
-import React from 'react';
-import {
-  BrowserRouter as Router,
-  Route,
-} from 'react-router-dom';
+import React, { Component } from 'react';
+import { Route, withRouter } from 'react-router-dom';
+import { connect } from 'react-redux';
 import { Layout } from 'antd';
 import './App.css';
 import UserProvider from './providers';
 import Header from './components/HeaderContainer';
-import Home from './home/HomeContainer';
-import Bases from './bases/BasesContainer';
+import HomeContainer from './home/HomeContainer';
+import BasesContainer from './bases/BasesContainer';
 import UserContainer from './user/UserContainer';
+import AuthContainer from './auth/AuthContainer';
+import store from './store';
+import { checkUserAuth } from './auth/ducks/sagas';
+import { getAuth } from './auth/ducks';
 
-const user = { name: 'Andre Kotlin', email: 'kotlyar562@gmail.com' };
 
-const App = () => (
-  <Router>
-    <UserProvider.Provider value={user}>
-      <Layout>
-        <Header />
-        <Layout.Content>
-          <Route exact path="/" component={Home} />
-          <Route path="/bases" component={Bases} />
-          <Route path="/user" component={UserContainer} />
-        </Layout.Content>
-      </Layout>
-    </UserProvider.Provider>
-  </Router>
-);
+class App extends Component {
+  componentDidMount() {
+    store.dispatch(checkUserAuth());
+  }
 
-export default App;
+  render() {
+    const { auth } = { ...this.props };
+    return (
+      <UserProvider.Provider value={auth}>
+        <Layout>
+          <Header />
+          <Layout.Content>
+            <Route exact path="/" component={HomeContainer} />
+            <Route path="/bases" component={BasesContainer} />
+            <Route path="/user" component={UserContainer} />
+            <Route path="/auth" component={AuthContainer} />
+          </Layout.Content>
+        </Layout>
+      </UserProvider.Provider>
+    );
+  }
+}
+
+const mapStateToProps = state => ({
+  auth: getAuth(state),
+});
+
+export default withRouter(connect(mapStateToProps, { checkUserAuth })(App));

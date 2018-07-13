@@ -81,6 +81,10 @@ export const activateUserError = errors => ({
   errors,
 });
 
+export const logoutUserSuccess = () => ({
+  type: types.LOGOUT_SUCCESS,
+});
+
 
 export const registerUser = (email, password) => ({
   type: types.REGISTER_USER,

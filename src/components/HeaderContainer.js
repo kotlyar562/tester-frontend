@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import HeaderComponent from './HeaderComponent';
 import UserProvider from '../providers';
+import { logoutUser } from '../auth/ducks';
 
 class Header extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      activeLink: 'home',
+      activeLink: '',
     };
   }
 
@@ -19,10 +21,17 @@ class Header extends Component {
   render() {
     return (
       <UserProvider.Consumer>
-        {user => <HeaderComponent {...this.state} user={user} changeMenu={this.changeActiveMenu} />}
+        {auth => (
+          <HeaderComponent
+            {...this.state}
+            user={auth.user}
+            logout={this.props.logoutUser}
+            changeMenu={this.changeActiveMenu}
+          />)
+         }
       </UserProvider.Consumer>
     );
   }
 }
 
-export default Header;
+export default connect(null, { logoutUser })(Header);

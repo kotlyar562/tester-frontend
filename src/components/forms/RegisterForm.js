@@ -7,6 +7,7 @@ import {
   Checkbox,
   Divider,
   Icon,
+  Alert,
 } from 'antd';
 
 const FormItem = Form.Item;
@@ -35,12 +36,23 @@ class RegisterForm extends Component {
     }
   };
 
+  checkAndSubmit = (e) => {
+    const { form, registerUser } = this.props;
+    e.preventDefault();
+    form.validateFields((err, values) => {
+      if (!err) {
+        registerUser(values.email, values.password);
+      }
+    });
+  }
+
   render() {
-    const { form, submitForm } = { ...this.props };
-    const { getFieldDecorator } = { ...form };
+    const { form, auth } = this.props;
+    console.log('----register AUTH:', auth.errors && auth.errors.get("email"));
+    const { getFieldDecorator } = form;
     return (
-      <Form onSubmit={submitForm} layout="vertical">
-        <FormItem label="Электронный адрес">
+      <Form layout="vertical">
+        <FormItem label="Адрес электронной почты ">
           {getFieldDecorator('email', {
             rules: [{
               type: 'email', message: 'Введите корректный email!',
@@ -49,7 +61,12 @@ class RegisterForm extends Component {
               required: true, message: 'Это обязательное поле!',
             }],
           })(
-            <Input type="email" prefix={<Icon type="mail" style={styles.iconPrefix} />} placeholder="Email" />,
+            <div>
+              <Input type="email" name="email" prefix={<Icon type="mail" style={styles.iconPrefix} />} placeholder="Email" />
+              {auth.errors && auth.errors.get('email') && auth.errors.get('email').map(
+                (item, n) => <Alert key={'alerte'+n} message={item} type="error" />
+              )}
+            </div>,
           )}
         </FormItem>
         <FormItem label="Пароль">
@@ -58,7 +75,12 @@ class RegisterForm extends Component {
               required: true, message: 'Это обязательное поле!',
             }],
           })(
-            <Input prefix={<Icon type="lock" style={styles.iconPrefix} />} type="password" placeholder="Пароль" />,
+            <div>
+              <Input prefix={<Icon type="lock" style={styles.iconPrefix} />} type="password" placeholder="Пароль" />
+              {auth.errors && auth.errors.get('password') && auth.errors.get('password').map(
+                (item, n) => <Alert key={'alertp'+n} message={item} type="error" />
+              )}
+            </div>,
           )}
         </FormItem>
         <FormItem label="Повторите пароль">
@@ -87,10 +109,15 @@ class RegisterForm extends Component {
             </Checkbox>,
           )}
         </FormItem>
-        <Divider dashed />
-        <Button type="primary" htmlType="submit">
-          Заригистрироваться
+        <Button type="primary" htmlType="submit" onClick={this.checkAndSubmit}>
+          Зарегистрироваться
         </Button>
+        <Link to="/auth/login">
+          <Button type="default">
+            Вход
+          </Button>
+        </Link>
+        <Divider />
       </Form>
     );
   }

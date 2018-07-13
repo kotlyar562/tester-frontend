@@ -31,6 +31,9 @@ export default function (state = new InitialState(), action) {
       return state.set('status', 'register_success').set('errors', null);
     case types.REGISTER_ERROR:
       return state.set('status', 'register_error').set('errors', Map(action.errors));
+
+    case types.LOGOUT_SUCCESS:
+      return new InitialState();
     default:
       return state;
   }

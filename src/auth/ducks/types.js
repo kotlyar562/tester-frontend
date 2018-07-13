@@ -22,6 +22,7 @@ export const ACTIVATE_USER_REQUEST = '/auth/REQUEST_ACTIVATE_USER';
 export const ACTIVATE_USER_SUCCESS = '/auth/SUCCESS_ACTIVATE_USER';
 export const ACTIVATE_USER_ERROR = '/auth/ERROR_ACTIVATE_USER';
 
+export const LOGOUT_SUCCESS = '/auth/LOGOUT_SUCCESS';
 
 export const CHANGE_PASSWORD = '/auth/CHANGE_PASSWORD';
 export const CHANGE_USER = '/auth/CHANGE_USER';

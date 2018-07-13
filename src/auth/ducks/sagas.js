@@ -13,13 +13,12 @@ import {
   verifyToken,
   updateToken,
   fetchLoginUser,
+  fetchUserData,
   fetchRegisterUser,
 } from './api';
 
 
 // Проверка, есть ли токен в куках, если есть - проверка и обновление
-export const { checkUserAuth } = { ...actions };
-
 export function* checkUserSaga() {
   const token = yield select(tokenSelector);
   if (!token) {
@@ -57,6 +56,26 @@ export function* loginUserSaga(action) {
   }
 }
 
+export function* loadUserDataSaga() {
+  yield put(actions.loadUserRequest());
+  const token = yield select(tokenSelector);
+  try {
+    const resp = yield call(fetchUserData, token);
+    if (resp.success) {
+      yield put(actions.loadUserSuccess(resp.data));
+    } else {
+      yield put(actions.loadUserError(resp.errors));
+    }
+  } catch (e) {
+    yield put(actions.loadUserError(e));
+  }
+}
+
+export function* logoutUserSaga() {
+  yield call(deleteCookie, 'token');
+  yield put(actions.logoutUserSuccess());
+}
+
 export function* registerUserSaga(action) {
   yield put(actions.registerRequest());
   try {
@@ -75,6 +94,8 @@ export function* watchUserSaga() {
   yield all([
     takeEvery(types.CHECK_USER_AUTH, checkUserSaga),
     takeEvery(types.LOGIN_USER, loginUserSaga),
+    takeEvery(types.AUTH_SUCCESS, loadUserDataSaga),
+    takeEvery(types.LOGOUT, logoutUserSaga),
     takeEvery(types.REGISTER_USER, registerUserSaga),
   ]);
 }

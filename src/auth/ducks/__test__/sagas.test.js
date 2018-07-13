@@ -1,5 +1,11 @@
 import { select, put, call } from 'redux-saga/effects';
-import { checkUserSaga, loginUserSaga, registerUserSaga } from '../sagas';
+import {
+  checkUserSaga,
+  loginUserSaga,
+  loadUserDataSaga,
+  logoutUserSaga,
+  registerUserSaga,
+} from '../sagas';
 import * as actions from '../actions';
 import * as types from '../types';
 import { tokenSelector } from '../selectors';
@@ -8,6 +14,7 @@ import {
   verifyToken,
   updateToken,
   fetchLoginUser,
+  fetchUserData,
   fetchRegisterUser,
 } from '../api';
 
@@ -102,6 +109,49 @@ describe('SAGA login user', () => {
     expect(saga.next().value).toEqual(put(actions.authRequest()));
     expect(saga.next().value).toEqual(call(fetchLoginUser, action.payload));
     expect(saga.throw('error').value).toEqual(put(actions.authError('error')));
+    expect(saga.next().done).toEqual(true);
+  });
+});
+
+
+describe('SAGA load user data', () => {
+  it('valid request', () => {
+    const saga = loadUserDataSaga();
+    expect(saga.next().value).toEqual(put(actions.loadUserRequest()));
+    expect(saga.next().value).toEqual(select(tokenSelector));
+    const token = 'its.valid.token';
+    expect(saga.next(token).value).toEqual(call(fetchUserData, token));
+    const resp = { success: true, data: { email: 'test@test.ru', password: '123456' } };
+    expect(saga.next(resp).value).toEqual(put(actions.loadUserSuccess(resp.data)));
+    expect(saga.next().done).toEqual(true);
+  });
+  it('no valid request', () => {
+    const saga = loadUserDataSaga();
+    expect(saga.next().value).toEqual(put(actions.loadUserRequest()));
+    expect(saga.next().value).toEqual(select(tokenSelector));
+    const token = 'its.no_valid.token';
+    expect(saga.next(token).value).toEqual(call(fetchUserData, token));
+    const resp = { success: false, errors: { auth: ['Не авторизованный запрос'] } };
+    expect(saga.next(resp).value).toEqual(put(actions.loadUserError(resp.errors)));
+    expect(saga.next().done).toEqual(true);
+  });
+  it('network/server erorr', () => {
+    const saga = loadUserDataSaga();
+    expect(saga.next().value).toEqual(put(actions.loadUserRequest()));
+    expect(saga.next().value).toEqual(select(tokenSelector));
+    const token = 'its.no_valid.token';
+    expect(saga.next(token).value).toEqual(call(fetchUserData, token));
+    expect(saga.throw('error').value).toEqual(put(actions.loadUserError('error')));
+    expect(saga.next().done).toEqual(true);
+  });
+});
+
+
+describe('SAGA logout user', () => {
+  it('logout', () => {
+    const saga = logoutUserSaga();
+    expect(saga.next().value).toEqual(call(deleteCookie, 'token'));
+    expect(saga.next().value).toEqual(put(actions.logoutUserSuccess()));
     expect(saga.next().done).toEqual(true);
   });
 });

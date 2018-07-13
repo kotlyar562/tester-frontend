@@ -87,6 +87,14 @@ describe('REDUCERS for user register', () => {
     expect(reducer(requestState, actions.registerError(registerErrors))).toEqual(errorState);
   });
 });
+
+describe('REDUCERS for logout user', () => {
+  it('logout', () => {
+    const defaultState = new InitialState();
+    const userState = defaultState.set('token', 'valid.user.token');
+    expect(reducer(userState, actions.logoutUserSuccess())).toEqual(defaultState);
+  });
+});
 /*
 it('', () => {
   expect().toEqual()

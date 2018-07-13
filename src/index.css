@@ -3,3 +3,59 @@ body {
   padding: 0;
   font-family: sans-serif;
 }
+.result {
+  text-align: center;
+  width: 50%;
+  margin: 0 auto;
+  margin-top: 20px;
+}
+
+.icon {
+  font-size: 72px;
+  line-height: 72px;
+  margin-bottom: 24px;
+}
+.icon > .success {
+  color: #52c41a;
+}
+
+.icon > .error {
+  color: #f5222d;
+}
+
+.title {
+  font-size: 24px;
+  color: grey;
+  font-weight: 500;
+  line-height: 32px;
+  margin-bottom: 16px;
+}
+
+.description {
+  font-size: 14px;
+  line-height: 22px;
+  color: blueviolet;
+  margin-bottom: 24px;
+}
+
+.extra {
+  background: #fafafa;
+  padding: 24px 40px;
+  border-radius: 2px;
+  text-align: center;
+}
+
+.actions {
+  margin-top: 32px;
+}
+
+button:not(:last-child) {
+  margin-right: 8px;
+}
+.action-button {
+}
+.center-block {
+  width: 50%;
+  margin: 50px auto;
+  text-align: center;
+}

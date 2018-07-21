@@ -48,7 +48,6 @@ class RegisterForm extends Component {
 
   render() {
     const { form, auth } = this.props;
-    console.log('----register AUTH:', auth.errors && auth.errors.get("email"));
     const { getFieldDecorator } = form;
     return (
       <Form layout="vertical">

@@ -16,7 +16,7 @@ const styles = {
 
 class ChangePasswordForm extends Component {
   checkAndSubmit = (e) => {
-    const { form, submitForm } = { ...this.props };
+    const { form, submitForm } = this.props;
     e.preventDefault();
     form.validateFields((err, values) => {
       if (!err) {
@@ -26,7 +26,7 @@ class ChangePasswordForm extends Component {
   }
 
   checkPassword = (rule, value, callback) => {
-    const { form } = { ...this.props };
+    const { form } = this.props;
     if (value && value !== form.getFieldValue('new_password')) {
       callback('Введенные пароли не совпадают!');
     } else {
@@ -35,8 +35,8 @@ class ChangePasswordForm extends Component {
   };
 
   render() {
-    const { form, cancelClick } = { ...this.props };
-    const { getFieldDecorator } = { ...form };
+    const { form, cancelClick } = this.props;
+    const { getFieldDecorator } = form;
     const formItemLayout = {
       labelCol: {
         xs: { span: 24 },

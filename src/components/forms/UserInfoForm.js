@@ -16,7 +16,7 @@ const styles = {
 
 class UserInfoForm extends Component {
   checkAndSubmit = (e) => {
-    const { form, submitForm } = { ...this.props };
+    const { form, submitForm } = this.props;
     e.preventDefault();
     form.validateFields((err, values) => {
       if (!err) {
@@ -30,9 +30,9 @@ class UserInfoForm extends Component {
       user,
       form,
       cancelClick,
-    } = { ...this.props };
+    } = this.props;
     const helpTxt = 'При изменении адреса электронной почты его нужно будет снова подтвердить';
-    const { getFieldDecorator } = { ...form };
+    const { getFieldDecorator } = form;
     const formItemLayout = {
       labelCol: {
         xs: { span: 24 },

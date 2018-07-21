@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import UserProfileComponent from './UserProfileComponent';
+import { changeUser, userSelector, statusSelector } from '../../auth/ducks';
+
 
 class UserProfile extends Component {
   constructor(props) {
@@ -10,7 +13,7 @@ class UserProfile extends Component {
   }
 
   componentDidMount() {
-    const { changeActiveSider } = { ...this.props };
+    const { changeActiveSider } = this.props;
     changeActiveSider('profile');
   }
 
@@ -21,7 +24,7 @@ class UserProfile extends Component {
   };
 
   submitInfoForm = (values) => {
-    console.log(values);
+    this.props.changeUser(values);
   }
 
   showPasswordForm = () => {
@@ -55,5 +58,9 @@ class UserProfile extends Component {
   }
 }
 
+const mapStateToProps = state => ({
+  user: userSelector(state),
+  status: statusSelector(state),
+});
 
-export default UserProfile;
+export default connect(mapStateToProps, { changeUser })(UserProfile);

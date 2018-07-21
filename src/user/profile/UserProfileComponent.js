@@ -5,6 +5,7 @@ import {
   Col,
   Card,
   Icon,
+  Spin,
 } from 'antd';
 import UserInfoForm from '../../components/forms/UserInfoForm';
 import ChangePasswordForm from '../../components/forms/ChangePasswordForm';
@@ -32,7 +33,8 @@ const UserProfileComponent = (props) => {
     submitPasswordForm,
     closeModal,
     user,
-  } = { ...props };
+    status,
+  } = props;
   return (
     <div>
       <Row gutter={16} justify="center">
@@ -61,7 +63,19 @@ const UserProfileComponent = (props) => {
         visible={modalOpening === 'infoForm'}
         onCancel={closeModal}
       >
-        <UserInfoForm user={user} submitForm={submitInfoForm} cancelClick={closeModal} />
+        <Spin
+          wrapperClassName="spin_transparent"
+          tip="Выполнение..."
+          spinning={status === 'change_user_request'}
+          delay={500}
+        >
+          <UserInfoForm
+            user={user}
+            status={status}
+            submitForm={submitInfoForm}
+            cancelClick={closeModal}
+          />
+        </Spin>
       </Modal>
       <Modal
         title="Изменить пароль"
@@ -69,7 +83,14 @@ const UserProfileComponent = (props) => {
         visible={modalOpening === 'passwordForm'}
         onCancel={closeModal}
       >
-        <ChangePasswordForm user={user} submitForm={submitPasswordForm} cancelClick={closeModal} />
+        <Spin
+          wrapperClassName="spin_transparent"
+          tip="Выполнение..."
+          spinning={status === 'change_user_request'}
+          delay={500}
+        >
+          <ChangePasswordForm submitForm={submitPasswordForm} cancelClick={closeModal} />
+        </Spin>
       </Modal>
     </div>
   );

@@ -9,11 +9,16 @@ export const authSelector = createSelector(
 );
 
 export const userSelector = createSelector(
-  stateSelector,
-  auth => auth.user,
+  authSelector,
+  auth => (auth.user ? auth.user.toObject() : null),
 );
 
 export const tokenSelector = createSelector(
-  stateSelector,
+  authSelector,
   auth => auth.token,
+);
+
+export const statusSelector = createSelector(
+  authSelector,
+  auth => auth.status,
 );

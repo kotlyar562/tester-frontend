@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import HeaderComponent from './HeaderComponent';
-import UserProvider from '../providers';
-import { logoutUser } from '../auth/ducks';
+import { logoutUser, userSelector } from '../auth/ducks';
 
 class Header extends Component {
   constructor(props) {
@@ -19,19 +18,20 @@ class Header extends Component {
   }
 
   render() {
+    const { user, logoutUser } = this.props;
     return (
-      <UserProvider.Consumer>
-        {auth => (
-          <HeaderComponent
-            {...this.state}
-            user={auth.user}
-            logout={this.props.logoutUser}
-            changeMenu={this.changeActiveMenu}
-          />)
-         }
-      </UserProvider.Consumer>
+      <HeaderComponent
+        {...this.state}
+        user={user}
+        logout={logoutUser}
+        changeMenu={this.changeActiveMenu}
+      />
     );
   }
 }
 
-export default connect(null, { logoutUser })(Header);
+const mapStateToProps = state => ({
+  user: userSelector(state),
+});
+
+export default connect(mapStateToProps, { logoutUser })(Header);

@@ -23,26 +23,23 @@ const styles = {
 };
 
 const UserMenu = (props) => {
-  const { user } = { ...props };
+  const { user, logout } = props;
   const menu = (
     <Menu>
       <Menu.Item key="user">
         <Link to="/user">
-          Профиль
+          Панель управления
         </Link>
       </Menu.Item>
       <Menu.Divider />
-      <Menu.Item key="logout">
-        <Link to="/auth/logout">
-          Выход
-        </Link>
+      <Menu.Item key="logout" onClick={logout}>
+        Выход
       </Menu.Item>
     </Menu>);
   return (
     <Dropdown overlay={menu} trigger={['click']}>
       <span style={styles.userEmail}>
-        {user.email}
-        <Icon type="down" />
+        {user.email} <Icon type="down" />
       </span>
     </Dropdown>
   );
@@ -57,7 +54,7 @@ const UserLogin = () => (
 );
 
 const HeaderComponent = (props) => {
-  const { user, activeLink, changeMenu } = { ...props };
+  const { user, activeLink, changeMenu, logout } = props;
   const horizontalMenu = (
     <Menu
       theme="light"
@@ -94,16 +91,21 @@ const HeaderComponent = (props) => {
   return (
     <Layout.Header style={styles.header}>
       <div style={styles.userBlock}>
-        {Object.keys(user).length > 0 ? <UserMenu user={user} /> : <UserLogin />}
+        {user ? <UserMenu user={user} logout={logout} /> : <UserLogin />}
       </div>
       {horizontalMenu}
     </Layout.Header>
   );
 };
 
+UserMenu.propTypes = {
+  user: PropTypes.object.isRequired,
+  logout: PropTypes.func.isRequired,
+};
+
 HeaderComponent.defaultProps = {
   activeLink: 'home',
-  user: {},
+  user: null,
   changeMenu: undefined,
 };
 

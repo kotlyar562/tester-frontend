@@ -30,12 +30,12 @@ const UserDashboard = () => (
 );
 
 const UserRouter = (props) => {
-  const { user, changeActiveSider } = { ...props };
+  const { changeActiveSider } = props;
   return (
     <div>
-      <Route exact path="/user" render={() => <UserDashboard user={user} changeActiveSider={changeActiveSider} />} />
-      <Route path="/user/profile" render={() => <UserProfile user={user} changeActiveSider={changeActiveSider} />} />
-      <Route path="/user/bases" render={() => <UserBases user={user} changeActiveSider={changeActiveSider} />} />
+      <Route exact path="/user" render={() => <UserDashboard changeActiveSider={changeActiveSider} />} />
+      <Route path="/user/profile" render={() => <UserProfile changeActiveSider={changeActiveSider} />} />
+      <Route path="/user/bases" render={() => <UserBases changeActiveSider={changeActiveSider} />} />
     </div>
   );
 };
@@ -43,10 +43,11 @@ const UserRouter = (props) => {
 const UserView = (props) => {
   const {
     activeSider,
-    user,
+    auth,
     changeActiveSider,
+    loginUser,
     breadcrumbs,
-  } = { ...props };
+  } = props;
   return (
     <Layout>
       <Layout.Sider
@@ -142,8 +143,9 @@ const UserView = (props) => {
               </Breadcrumb.Item>
             ))}
           </Breadcrumb>
-          {Object.keys(user).length > 0
-            ? <UserRouter user={user} changeActiveSider={changeActiveSider} /> : <UserLogin />}
+          {auth.token
+            ? <UserRouter changeActiveSider={changeActiveSider} />
+            : <UserLogin auth={auth} loginUser={loginUser} />}
           <Footer />
         </Layout.Content>
       </Layout>

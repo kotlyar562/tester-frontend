@@ -3,42 +3,34 @@ import { Route, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { Layout } from 'antd';
 import './App.css';
-import UserProvider from './providers';
 import Header from './components/HeaderContainer';
 import HomeContainer from './home/HomeContainer';
 import BasesContainer from './bases/BasesContainer';
 import UserContainer from './user/UserContainer';
 import AuthContainer from './auth/AuthContainer';
-import store from './store';
-import { checkUserAuth } from './auth/ducks/sagas';
-import { getAuth } from './auth/ducks';
+import StatusInfo from './components/StatusInfo';
+import { checkUserAuth } from './auth/ducks';
 
 
 class App extends Component {
   componentDidMount() {
-    store.dispatch(checkUserAuth());
+    this.props.checkUserAuth();
   }
 
   render() {
-    const { auth } = { ...this.props };
     return (
-      <UserProvider.Provider value={auth}>
-        <Layout>
-          <Header />
-          <Layout.Content>
-            <Route exact path="/" component={HomeContainer} />
-            <Route path="/bases" component={BasesContainer} />
-            <Route path="/user" component={UserContainer} />
-            <Route path="/auth" component={AuthContainer} />
-          </Layout.Content>
-        </Layout>
-      </UserProvider.Provider>
+      <Layout>
+        <Header />
+        <Layout.Content>
+          <Route exact path="/" component={HomeContainer} />
+          <Route path="/bases" component={BasesContainer} />
+          <Route path="/user" component={UserContainer} />
+          <Route path="/auth" component={AuthContainer} />
+        </Layout.Content>
+        <StatusInfo />
+      </Layout>
     );
   }
 }
 
-const mapStateToProps = state => ({
-  auth: getAuth(state),
-});
-
-export default withRouter(connect(mapStateToProps, { checkUserAuth })(App));
+export default withRouter(connect(null, { checkUserAuth })(App));

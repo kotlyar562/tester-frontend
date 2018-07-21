@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import UserProvider from '../providers';
+import { connect } from 'react-redux';
 import UserView from './UserComponent';
+import { loginUser, authSelector } from '../auth/ducks';
 
 
 class UserContainer extends Component {
@@ -27,19 +28,21 @@ class UserContainer extends Component {
   };
 
   render() {
+    const { auth } = this.props;
     return (
-      <UserProvider.Consumer>
-        {user => (
-          <UserView
-            user={user}
-            changeActiveSider={this.changeActiveSider}
-            changeBreadcrumbs={this.changeBreadcrumbs}
-            {...this.state}
-          />)
-        }
-      </UserProvider.Consumer>
+      <UserView
+        auth={auth}
+        changeActiveSider={this.changeActiveSider}
+        changeBreadcrumbs={this.changeBreadcrumbs}
+        loginUser={this.props.loginUser}
+        {...this.state}
+      />
     );
   }
 }
 
-export default UserContainer;
+const mapStateToProps = state => ({
+  auth: authSelector(state),
+});
+
+export default connect(mapStateToProps, { loginUser })(UserContainer);

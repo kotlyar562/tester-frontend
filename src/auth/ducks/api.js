@@ -58,6 +58,26 @@ export const fetchLoginUser = ({ email, password }) => {
   }).catch(errors => errors);
 };
 
+// Загрузка данных о пользователе
+export const fetchUserData = (token) => {
+  console.log('---load user data');
+  return fetch(`${domen}/api/v1/auth/me/`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `JWT ${token}`,
+    },
+    credentials: 'include',
+  }).then((response) => {
+    if (response.ok) {
+      return response.json()
+        .then(data => ({ success: true, data }));
+    }
+    return response.json()
+      .then(errors => ({ success: false, errors }));
+  }).catch(errors => errors);
+};
+
 // Регистрация нового пользователя
 export const fetchRegisterUser = ({ email, password }) => {
   console.log('---start register');
@@ -70,6 +90,27 @@ export const fetchRegisterUser = ({ email, password }) => {
   }).then((response) => {
     if (response.ok) {
       return response.json().then(() => ({ success: true }));
+    }
+    return response.json()
+      .then(errors => ({ success: false, errors }));
+  }).catch(errors => errors);
+};
+
+// Изменение личных данных пользоватлея
+export const fetchChangeUser = (token, data) => {
+  console.log('---change user info');
+  return fetch(`${domen}/api/v1/auth/me/`, {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `JWT ${token}`,
+    },
+    credentials: 'include',
+    body: JSON.stringify(data),
+  }).then((response) => {
+    if (response.ok) {
+      return response.json()
+        .then(newData => ({ success: true, data: newData }));
     }
     return response.json()
       .then(errors => ({ success: false, errors }));

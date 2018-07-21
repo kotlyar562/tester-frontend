@@ -7,7 +7,7 @@ import {
 } from 'redux-saga/effects';
 import * as types from './types';
 import * as actions from './actions';
-import { tokenSelector } from './selectors';
+import { tokenSelector, userSelector } from './selectors';
 import { setCookie, getCookie, deleteCookie } from './utils';
 import {
   verifyToken,
@@ -15,8 +15,8 @@ import {
   fetchLoginUser,
   fetchUserData,
   fetchRegisterUser,
+  fetchChangeUser,
 } from './api';
-
 
 // Проверка, есть ли токен в куках, если есть - проверка и обновление
 export function* checkUserSaga() {
@@ -90,6 +90,26 @@ export function* registerUserSaga(action) {
   }
 }
 
+export function* changeUserSaga(action) {
+  yield put(actions.changeUserRequest());
+  const token = yield select(tokenSelector);
+  const user = yield select(userSelector);
+  try {
+    const resp = yield call(fetchChangeUser, token, action.payload);
+    if (resp.success) {
+      if (action.payload.email !== user.email) {
+        yield put(actions.logoutUser());
+      } else {
+        yield put(actions.changeUserSuccess(resp.data));
+      }
+    } else {
+      yield put(actions.changeUserError(resp.errors));
+    }
+  } catch (e) {
+    yield put(actions.changeUserError(e));
+  }
+}
+
 export function* watchUserSaga() {
   yield all([
     takeEvery(types.CHECK_USER_AUTH, checkUserSaga),
@@ -97,5 +117,6 @@ export function* watchUserSaga() {
     takeEvery(types.AUTH_SUCCESS, loadUserDataSaga),
     takeEvery(types.LOGOUT, logoutUserSaga),
     takeEvery(types.REGISTER_USER, registerUserSaga),
+    takeEvery(types.CHANGE_USER, changeUserSaga),
   ]);
 }

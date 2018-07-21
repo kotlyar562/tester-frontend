@@ -95,6 +95,28 @@ describe('REDUCERS for logout user', () => {
     expect(reducer(userState, actions.logoutUserSuccess())).toEqual(defaultState);
   });
 });
+
+describe('REDUCERS for change user info', () => {
+  const defaultState = new InitialState();
+  const requestState = defaultState.set('status', 'change_user_request');
+  it('request', () => {
+    expect(reducer(defaultState, actions.changeUserRequest())).toEqual(requestState);
+  });
+
+  const payload = { first_name: 'Bob', last_name: 'Kruger' };
+  const successState = requestState.set('status', 'change_user_success').set('user', Map(payload));
+  it('success', () => {
+    expect(reducer(requestState, actions.changeUserSuccess(payload))).toEqual(successState);
+  });
+
+  const errors = {
+    email: ['Это поле не может быть пустым.'],
+  };
+  const errorState = defaultState.set('status', 'change_user_error').set('errors', Map(errors));
+  it('error', () => {
+    expect(reducer(requestState, actions.changeUserError(errors))).toEqual(errorState);
+  });
+});
 /*
 it('', () => {
   expect().toEqual()

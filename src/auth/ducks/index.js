@@ -6,8 +6,9 @@ export {
   logoutUser,
   checkUserAuth,
   registerUser,
+  changeUser,
 } from './actions';
 
-export { authSelector } from './selectors';
+export { authSelector, userSelector, statusSelector } from './selectors';
 
 export default authReducer;

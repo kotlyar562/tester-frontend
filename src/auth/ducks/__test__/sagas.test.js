@@ -5,10 +5,11 @@ import {
   loadUserDataSaga,
   logoutUserSaga,
   registerUserSaga,
+  changeUserSaga,
 } from '../sagas';
 import * as actions from '../actions';
 import * as types from '../types';
-import { tokenSelector } from '../selectors';
+import { tokenSelector, userSelector } from '../selectors';
 import { getCookie, setCookie, deleteCookie } from '../utils';
 import {
   verifyToken,
@@ -16,6 +17,7 @@ import {
   fetchLoginUser,
   fetchUserData,
   fetchRegisterUser,
+  fetchChangeUser,
 } from '../api';
 
 
@@ -197,6 +199,71 @@ describe('SAGA register user', () => {
     expect(saga.next().value).toEqual(put(actions.registerRequest()));
     expect(saga.next().value).toEqual(call(fetchRegisterUser, action.payload));
     expect(saga.throw('error').value).toEqual(put(actions.registerError('error')));
+    expect(saga.next().done).toEqual(true);
+  });
+});
+
+
+describe('SAGA change user info', () => {
+  const action = {
+    type: types.CHANGE_USER,
+    payload: { email: 'test@test.ru', first_name: 'Bob', last_name: 'Martin' },
+  };
+  it('valid data, no change email', () => {
+    const saga = changeUserSaga(action);
+    expect(saga.next().value).toEqual(put(actions.changeUserRequest()));
+    expect(saga.next().value).toEqual(select(tokenSelector));
+    expect(saga.next().value).toEqual(select(userSelector));
+    const token = 'its.valid.token';
+    const user = actions.payload;
+    expect(saga.next(token).value).toEqual(call(fetchChangeUser, token, action.payload));
+    const resp = { success: true, data: { email: 'test@test.ru' } };
+    if (action.payload.email !== user.email) {
+      expect(saga.next(resp).value).toEqual(put(actions.logoutUser()));
+    } else {
+      expect(saga.next(resp).value).toEqual(put(actions.changeUserSuccess(resp.data)));
+    }
+    expect(saga.next().done).toEqual(true);
+  });
+  it('valid data, changed email', () => {
+    const saga = changeUserSaga(action);
+    expect(saga.next().value).toEqual(put(actions.changeUserRequest()));
+    expect(saga.next().value).toEqual(select(tokenSelector));
+    expect(saga.next().value).toEqual(select(userSelector));
+    const token = 'its.valid.token';
+    const user = { email: 'newemail@test.ru' };
+    expect(saga.next(token).value).toEqual(call(fetchChangeUser, token, action.payload));
+    const resp = { success: true, data: { email: 'newemail@test.ru' } };
+    if (action.payload.email !== user.email) {
+      expect(saga.next(resp).value).toEqual(put(actions.logoutUser()));
+    } else {
+      expect(saga.next(resp).value).toEqual(put(actions.changeUserSuccess(resp.data)));
+    }
+    expect(saga.next().done).toEqual(true);
+  });
+  it(' no valid request', () => {
+    const saga = changeUserSaga(action);
+    expect(saga.next().value).toEqual(put(actions.changeUserRequest()));
+    expect(saga.next().value).toEqual(select(tokenSelector));
+    expect(saga.next().value).toEqual(select(userSelector));
+    const token = 'its.novalid.token';
+    expect(saga.next(token).value).toEqual(call(fetchChangeUser, token, action.payload));
+    const errors = {
+      email: ['Это поле не может быть пустым.'],
+    };
+    const resp = { success: false, errors };
+    expect(saga.next(resp).value).toEqual(put(actions.changeUserError(resp.errors)));
+    expect(saga.next().done).toEqual(true);
+  });
+  it('network/server error', () => {
+    const saga = changeUserSaga(action);
+    expect(saga.next().value).toEqual(put(actions.changeUserRequest()));
+    expect(saga.next().value).toEqual(select(tokenSelector));
+    expect(saga.next().value).toEqual(select(userSelector));
+    const token = 'its.novalid.token';
+    const user = action.payload;
+    expect(saga.next(user, token).value).toEqual(call(fetchChangeUser, token, action.payload));
+    expect(saga.throw('error').value).toEqual(put(actions.changeUserError('error')));
     expect(saga.next().done).toEqual(true);
   });
 });

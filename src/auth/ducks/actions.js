@@ -45,9 +45,9 @@ export const changeUserRequest = () => ({
   type: types.CHANGE_USER_REQUEST,
 });
 
-export const changeUserSuccess = userInfo => ({
+export const changeUserSuccess = payload => ({
   type: types.CHANGE_USER_SUCCESS,
-  userInfo,
+  payload,
 });
 
 export const changeUserError = errors => ({
@@ -85,6 +85,11 @@ export const logoutUserSuccess = () => ({
   type: types.LOGOUT_SUCCESS,
 });
 
+
+export const changeUser = payload => ({
+  type: types.CHANGE_USER,
+  payload,
+});
 
 export const registerUser = (email, password) => ({
   type: types.REGISTER_USER,

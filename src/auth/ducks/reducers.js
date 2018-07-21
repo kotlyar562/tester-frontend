@@ -21,7 +21,7 @@ export default function (state = new InitialState(), action) {
     case types.LOAD_USERINFO_REQUEST:
       return state.set('status', 'load_user_request').set('errors', null);
     case types.LOAD_USERINFO_SUCCESS:
-      return state.merge({ status: 'load_user_success', user: action.userInfo, errors: null });
+      return state.merge({ status: 'load_user_success', user: Map(action.userInfo), errors: null });
     case types.LOAD_USERINFO_ERROR:
       return state.set('status', 'load_user_error').set('errors', Map(action.errors));
 
@@ -31,6 +31,13 @@ export default function (state = new InitialState(), action) {
       return state.set('status', 'register_success').set('errors', null);
     case types.REGISTER_ERROR:
       return state.set('status', 'register_error').set('errors', Map(action.errors));
+
+    case types.CHANGE_USER_REQUEST:
+      return state.set('status', 'change_user_request').set('errors', null);
+    case types.CHANGE_USER_SUCCESS:
+      return state.merge({ status: 'change_user_success', user: Map(action.payload), errors: null });
+    case types.CHANGE_USER_ERROR:
+      return state.set('status', 'change_user_error').set('errors', Map(action.errors));
 
     case types.LOGOUT_SUCCESS:
       return new InitialState();

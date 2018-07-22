@@ -22,3 +22,8 @@ export const statusSelector = createSelector(
   authSelector,
   auth => auth.status,
 );
+
+export const errorsSelector = createSelector(
+  authSelector,
+  auth => (auth.errors ? auth.errors.toObject() : null),
+);

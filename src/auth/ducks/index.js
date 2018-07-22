@@ -8,6 +8,7 @@ export {
   registerUser,
   changeUser,
   changePassword,
+  activateUser,
 } from './actions';
 
 export {

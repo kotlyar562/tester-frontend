@@ -7,6 +7,7 @@ import {
   registerUserSaga,
   changeUserSaga,
   changePasswordSaga,
+  activateUserSaga,
 } from '../sagas';
 import * as actions from '../actions';
 import * as types from '../types';
@@ -20,6 +21,7 @@ import {
   fetchRegisterUser,
   fetchChangeUser,
   fetchChangeUserPassword,
+  fetchActivateUser,
 } from '../api';
 
 
@@ -315,6 +317,41 @@ describe('SAGA change password', () => {
       action.payload.new_password,
     ));
     expect(saga.throw(err).value).toEqual(put(actions.changePasswordError(err)));
+    expect(saga.next().done).toEqual(true);
+  });
+});
+
+describe('SAGA activate user', () => {
+  const action = {
+    type: types.ACTIVATE_USER,
+    payload: { uid: 'AB', token: '4y3-fb38f5b1d3hd372a6711' },
+  };
+  it('valid data', () => {
+    const saga = activateUserSaga(action);
+    expect(saga.next().value).toEqual(put(actions.activateUserRequest()));
+    expect(saga.next().value).toEqual(call(fetchActivateUser,
+      action.payload.uid, action.payload.token));
+    const resp = { success: true };
+    expect(saga.next(resp).value).toEqual(put(actions.activateUserSuccess()));
+    expect(saga.next().done).toEqual(true);
+  });
+  it('no valid data', () => {
+    const saga = activateUserSaga(action);
+    expect(saga.next().value).toEqual(put(actions.activateUserRequest()));
+    expect(saga.next().value).toEqual(call(fetchActivateUser,
+      action.payload.uid, action.payload.token));
+
+    const errors = { uid: ["Invalid user id or user doesn't exist."] };
+    const resp = { success: false, errors };
+    expect(saga.next(resp).value).toEqual(put(actions.activateUserError(errors)));
+    expect(saga.next().done).toEqual(true);
+  });
+  it('server/netvork error', () => {
+    const saga = activateUserSaga(action);
+    expect(saga.next().value).toEqual(put(actions.activateUserRequest()));
+    expect(saga.next().value).toEqual(call(fetchActivateUser,
+      action.payload.uid, action.payload.token));
+    expect(saga.throw('error').value).toEqual(put(actions.activateUserError('error')));
     expect(saga.next().done).toEqual(true);
   });
 });

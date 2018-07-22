@@ -20,7 +20,6 @@ class StatusInfo extends Component {
   componentDidUpdate(prevProps) {
     const { status, errors } = this.props;
     const error = errors && Object.values(errors).join('\n');
-    console.log('errror:', error);
     const loadingIcon = <Icon type="loading" />;
     if (status !== prevProps.status) {
       if (status === 'auth_request') {
@@ -53,6 +52,12 @@ class StatusInfo extends Component {
         this.showNotification('success', 'Пароль успешно изменен');
       } else if (status === 'change_password_error') {
         this.showNotification('error', 'Ошибка при изменении пароля', error);
+      } else if (status === 'activate_user_request') {
+        this.showNotification('info', 'Активация...', '', loadingIcon);
+      } else if (status === 'activate_user_success') {
+        this.showNotification('success', 'Активация выполнена');
+      } else if (status === 'activate_user_error') {
+        this.showNotification('error', 'Ошибка при активации', error);
       }
     }
   }

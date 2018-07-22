@@ -138,6 +138,27 @@ describe('REDUCER for change password', () => {
     expect(reducer(requestState, actions.changePasswordError(errors))).toEqual(errorState);
   });
 });
+
+describe('REDUCER for activate user', () => {
+  const defaultState = new InitialState();
+  const requestState = defaultState.set('status', 'activate_user_request');
+  it('request', () => {
+    expect(reducer(defaultState, actions.activateUserRequest())).toEqual(requestState);
+  });
+
+  const successState = requestState.set('status', 'activate_user_success');
+  it('success', () => {
+    expect(reducer(requestState, actions.activateUserSuccess())).toEqual(successState);
+  });
+
+  const errors = {
+    uid: ['Неверные данные для активации.'],
+  };
+  const errorState = requestState.set('status', 'activate_user_error').set('errors', Map(errors));
+  it('error', () => {
+    expect(reducer(requestState, actions.activateUserError(errors))).toEqual(errorState);
+  });
+});
 /*
 it('', () => {
   expect().toEqual()

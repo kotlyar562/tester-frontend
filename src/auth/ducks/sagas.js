@@ -17,6 +17,7 @@ import {
   fetchRegisterUser,
   fetchChangeUser,
   fetchChangeUserPassword,
+  fetchActivateUser,
 } from './api';
 
 // Проверка, есть ли токен в куках, если есть - проверка и обновление
@@ -131,6 +132,20 @@ export function* changePasswordSaga(action) {
   }
 }
 
+export function* activateUserSaga(action) {
+  yield put(actions.activateUserRequest());
+  try {
+    const resp = yield call(fetchActivateUser, action.payload.uid, action.payload.token);
+    if (resp.success) {
+      yield put(actions.activateUserSuccess());
+    } else {
+      yield put(actions.activateUserError(resp.errors));
+    }
+  } catch (e) {
+    yield put(actions.activateUserError(e));
+  }
+}
+
 export function* watchUserSaga() {
   yield all([
     takeEvery(types.CHECK_USER_AUTH, checkUserSaga),
@@ -140,5 +155,6 @@ export function* watchUserSaga() {
     takeEvery(types.REGISTER_USER, registerUserSaga),
     takeEvery(types.CHANGE_USER, changeUserSaga),
     takeEvery(types.CHANGE_PASSWORD, changePasswordSaga),
+    takeEvery(types.ACTIVATE_USER, activateUserSaga),
   ]);
 }

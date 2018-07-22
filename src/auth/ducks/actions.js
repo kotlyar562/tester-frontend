@@ -86,6 +86,11 @@ export const logoutUserSuccess = () => ({
 });
 
 
+export const activateUser = (uid, token) => ({
+  type: types.ACTIVATE_USER,
+  payload: { uid, token },
+});
+
 export const changePassword = payload => ({
   type: types.CHANGE_PASSWORD,
   payload,

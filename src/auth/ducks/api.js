@@ -139,3 +139,21 @@ export const fetchChangeUserPassword = (token, current_password, new_password) =
       .then(errors => ({ success: false, errors }));
   }).catch(errors => errors);
 };
+
+// Активация пользователя по email
+export const fetchActivateUser = (uid, token) => {
+  console.log('---user activate');
+  return fetch(`${domen}/api/v1/auth/users/activate/`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ uid, token }),
+  }).then((response) => {
+    if (response.ok) {
+      return { success: true };
+    }
+    return response.json()
+      .then(errors => ({ success: false, errors }));
+  }).catch(errors => errors);
+};

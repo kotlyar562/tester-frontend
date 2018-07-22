@@ -117,6 +117,27 @@ describe('REDUCERS for change user info', () => {
     expect(reducer(requestState, actions.changeUserError(errors))).toEqual(errorState);
   });
 });
+
+describe('REDUCER for change password', () => {
+  const defaultState = new InitialState();
+  const requestState = defaultState.set('status', 'change_password_request');
+  it('request', () => {
+    expect(reducer(defaultState, actions.changePasswordRequest())).toEqual(requestState);
+  });
+
+  const successState = requestState.set('status', 'change_password_success');
+  it('success', () => {
+    expect(reducer(requestState, actions.changePasswordSuccess())).toEqual(successState);
+  });
+
+  const errors = {
+    email: ['Это поле не может быть пустым.'],
+  };
+  const errorState = requestState.set('status', 'change_password_error').set('errors', Map(errors));
+  it('error', () => {
+    expect(reducer(requestState, actions.changePasswordError(errors))).toEqual(errorState);
+  });
+});
 /*
 it('', () => {
   expect().toEqual()

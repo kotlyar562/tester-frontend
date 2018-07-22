@@ -86,6 +86,11 @@ export const logoutUserSuccess = () => ({
 });
 
 
+export const changePassword = payload => ({
+  type: types.CHANGE_PASSWORD,
+  payload,
+});
+
 export const changeUser = payload => ({
   type: types.CHANGE_USER,
   payload,

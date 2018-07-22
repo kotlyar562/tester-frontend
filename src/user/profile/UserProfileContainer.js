@@ -1,7 +1,12 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import UserProfileComponent from './UserProfileComponent';
-import { changeUser, userSelector, statusSelector } from '../../auth/ducks';
+import {
+  changeUser,
+  changePassword,
+  userSelector,
+  statusSelector,
+} from '../../auth/ducks';
 
 
 class UserProfile extends Component {
@@ -34,7 +39,7 @@ class UserProfile extends Component {
   };
 
   submitPasswordForm = (values) => {
-    console.log(values);
+    this.props.changePassword(values);
   }
 
   closeModal = () => {
@@ -63,4 +68,4 @@ const mapStateToProps = state => ({
   status: statusSelector(state),
 });
 
-export default connect(mapStateToProps, { changeUser })(UserProfile);
+export default connect(mapStateToProps, { changeUser, changePassword })(UserProfile);

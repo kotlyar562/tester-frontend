@@ -16,6 +16,7 @@ import {
   fetchUserData,
   fetchRegisterUser,
   fetchChangeUser,
+  fetchChangeUserPassword,
 } from './api';
 
 // Проверка, есть ли токен в куках, если есть - проверка и обновление
@@ -110,6 +111,26 @@ export function* changeUserSaga(action) {
   }
 }
 
+export function* changePasswordSaga(action) {
+  yield put(actions.changePasswordRequest());
+  const token = yield select(tokenSelector);
+  try {
+    const resp = yield call(
+      fetchChangeUserPassword,
+      token,
+      action.payload.current_password,
+      action.payload.new_password,
+    );
+    if (resp.success) {
+      yield put(actions.changePasswordSuccess());
+    } else {
+      yield put(actions.changePasswordError(resp.errors));
+    }
+  } catch (e) {
+    yield put(actions.changePasswordError(e));
+  }
+}
+
 export function* watchUserSaga() {
   yield all([
     takeEvery(types.CHECK_USER_AUTH, checkUserSaga),
@@ -118,5 +139,6 @@ export function* watchUserSaga() {
     takeEvery(types.LOGOUT, logoutUserSaga),
     takeEvery(types.REGISTER_USER, registerUserSaga),
     takeEvery(types.CHANGE_USER, changeUserSaga),
+    takeEvery(types.CHANGE_PASSWORD, changePasswordSaga),
   ]);
 }

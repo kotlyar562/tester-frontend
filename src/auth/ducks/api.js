@@ -116,3 +116,26 @@ export const fetchChangeUser = (token, data) => {
       .then(errors => ({ success: false, errors }));
   }).catch(errors => errors);
 };
+
+// Изменеие пароля пользователя
+export const fetchChangeUserPassword = (token, current_password, new_password) => {
+  console.log('---change user password');
+  return fetch(`${domen}/api/v1/auth/password/`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `JWT ${token}`,
+    },
+    credentials: 'include',
+    body: JSON.stringify({
+      new_password,
+      current_password,
+    }),
+  }).then((response) => {
+    if (response.ok) {
+      return { success: true };
+    }
+    return response.json()
+      .then(errors => ({ success: false, errors }));
+  }).catch(errors => errors);
+};

@@ -58,6 +58,18 @@ class StatusInfo extends Component {
         this.showNotification('success', 'Активация выполнена');
       } else if (status === 'activate_user_error') {
         this.showNotification('error', 'Ошибка при активации', error);
+      } else if (status === 'reset_password_request') {
+        this.showNotification('info', 'Запрос...', '', loadingIcon);
+      } else if (status === 'reset_password_success') {
+        this.showNotification('success', 'Запрос выполнен успешно');
+      } else if (status === 'reset_password_error') {
+        this.showNotification('error', 'Ошибка при сбросе пароля', error);
+      } else if (status === 'reset_password_confirm_request') {
+        this.showNotification('info', 'Запрос...', '', loadingIcon);
+      } else if (status === 'reset_password_confirm_success') {
+        this.showNotification('success', 'Новый пароль установлен');
+      } else if (status === 'reset_password_confirm_error') {
+        this.showNotification('error', 'Новый пароль не установлен', error);
       }
     }
   }

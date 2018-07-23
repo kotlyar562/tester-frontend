@@ -139,28 +139,44 @@ describe('REDUCER for change password', () => {
   });
 });
 
-describe('REDUCER for activate user', () => {
+describe('REDUCER for reset password (send email)', () => {
   const defaultState = new InitialState();
-  const requestState = defaultState.set('status', 'activate_user_request');
+  const requestState = defaultState.set('status', 'reset_password_request');
   it('request', () => {
-    expect(reducer(defaultState, actions.activateUserRequest())).toEqual(requestState);
+    expect(reducer(defaultState, actions.resetPasswordRequest())).toEqual(requestState);
   });
 
-  const successState = requestState.set('status', 'activate_user_success');
+  const successState = requestState.set('status', 'reset_password_success');
   it('success', () => {
-    expect(reducer(requestState, actions.activateUserSuccess())).toEqual(successState);
+    expect(reducer(requestState, actions.resetPasswordSuccess())).toEqual(successState);
   });
 
   const errors = {
-    uid: ['Неверные данные для активации.'],
+    email: ['Это поле не может быть пустым.'],
   };
-  const errorState = requestState.set('status', 'activate_user_error').set('errors', Map(errors));
+  const errorState = requestState.set('status', 'reset_password_error').set('errors', Map(errors));
   it('error', () => {
-    expect(reducer(requestState, actions.activateUserError(errors))).toEqual(errorState);
+    expect(reducer(requestState, actions.resetPasswordError(errors))).toEqual(errorState);
   });
 });
-/*
-it('', () => {
-  expect().toEqual()
+
+describe('REDUCER for confirm reset password (install new password)', () => {
+  const defaultState = new InitialState();
+  const requestState = defaultState.set('status', 'reset_password_confirm_request');
+  it('request', () => {
+    expect(reducer(defaultState, actions.resetPasswordConfirmRequest())).toEqual(requestState);
+  });
+
+  const successState = requestState.set('status', 'reset_password_confirm_success');
+  it('success', () => {
+    expect(reducer(requestState, actions.resetPasswordConfirmSuccess())).toEqual(successState);
+  });
+
+  const errors = {
+    new_password: ['Это поле не может быть пустым.'],
+  };
+  const errorState = requestState.set('status', 'reset_password_confirm_error').set('errors', Map(errors));
+  it('error', () => {
+    expect(reducer(requestState, actions.resetPasswordConfirmError(errors))).toEqual(errorState);
+  });
 });
-*/

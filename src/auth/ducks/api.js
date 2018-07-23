@@ -157,3 +157,39 @@ export const fetchActivateUser = (uid, token) => {
       .then(errors => ({ success: false, errors }));
   }).catch(errors => errors);
 };
+
+// Запрос на сброс пароля
+export const fetchResetPassword = (email) => {
+  console.log('---reset password');
+  return fetch(`${domen}/api/v1/auth/password/reset/`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ email }),
+  }).then((response) => {
+    if (response.ok) {
+      return { success: true };
+    }
+    return response.json()
+      .then(errors => ({ success: false, errors }));
+  }).catch(errors => errors);
+};
+
+// Установка нового пароля пользователя
+export const fetchResetPasswordConfirm = (data) => {
+  console.log('---set new password');
+  return fetch(`${domen}/api/v1/auth/password/reset/confirm/`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(data),
+  }).then((response) => {
+    if (response.ok) {
+      return { success: true };
+    }
+    return response.json()
+      .then(errors => ({ success: false, errors }));
+  }).catch(errors => errors);
+};

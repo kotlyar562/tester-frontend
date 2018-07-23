@@ -53,6 +53,20 @@ export default function (state = new InitialState(), action) {
     case types.ACTIVATE_USER_ERROR:
       return state.set('status', 'activate_user_error').set('errors', Map(action.errors));
 
+    case types.RESET_PASSWORD_REQUEST:
+      return state.set('status', 'reset_password_request').set('errors', null);
+    case types.RESET_PASSWORD_SUCCESS:
+      return state.set('status', 'reset_password_success').set('errors', null);
+    case types.RESET_PASSWORD_ERROR:
+      return state.set('status', 'reset_password_error').set('errors', Map(action.errors));
+
+    case types.RESET_PASSWORD_CONFIRM_REQUEST:
+      return state.set('status', 'reset_password_confirm_request').set('errors', null);
+    case types.RESET_PASSWORD_CONFIRM_SUCCESS:
+      return state.set('status', 'reset_password_confirm_success').set('errors', null);
+    case types.RESET_PASSWORD_CONFIRM_ERROR:
+      return state.set('status', 'reset_password_confirm_error').set('errors', Map(action.errors));
+
     case types.LOGOUT_SUCCESS:
       return new InitialState();
     default:

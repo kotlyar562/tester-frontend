@@ -9,6 +9,8 @@ export {
   changeUser,
   changePassword,
   activateUser,
+  resetPassword,
+  resetPasswordConfirm,
 } from './actions';
 
 export {

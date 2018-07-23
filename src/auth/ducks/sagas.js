@@ -18,6 +18,8 @@ import {
   fetchChangeUser,
   fetchChangeUserPassword,
   fetchActivateUser,
+  fetchResetPassword,
+  fetchResetPasswordConfirm,
 } from './api';
 
 // Проверка, есть ли токен в куках, если есть - проверка и обновление
@@ -146,6 +148,34 @@ export function* activateUserSaga(action) {
   }
 }
 
+export function* resetPasswordSaga(action) {
+  yield put(actions.resetPasswordRequest());
+  try {
+    const resp = yield call(fetchResetPassword, action.email);
+    if (resp.success) {
+      yield put(actions.resetPasswordSuccess());
+    } else {
+      yield put(actions.resetPasswordError(resp.errors));
+    }
+  } catch (e) {
+    yield put(actions.resetPasswordError(e));
+  }
+}
+
+export function* resetPasswordConfirmSaga(action) {
+  yield put(actions.resetPasswordConfirmRequest());
+  try {
+    const resp = yield call(fetchResetPasswordConfirm, action.payload);
+    if (resp.success) {
+      yield put(actions.resetPasswordConfirmSuccess());
+    } else {
+      yield put(actions.resetPasswordConfirmError(resp.errors));
+    }
+  } catch (e) {
+    yield put(actions.resetPasswordConfirmError(e));
+  }
+}
+
 export function* watchUserSaga() {
   yield all([
     takeEvery(types.CHECK_USER_AUTH, checkUserSaga),
@@ -156,5 +186,7 @@ export function* watchUserSaga() {
     takeEvery(types.CHANGE_USER, changeUserSaga),
     takeEvery(types.CHANGE_PASSWORD, changePasswordSaga),
     takeEvery(types.ACTIVATE_USER, activateUserSaga),
+    takeEvery(types.RESET_PASSWORD, resetPasswordSaga),
+    takeEvery(types.RESET_PASSWORD_CONFIRM, resetPasswordConfirmSaga),
   ]);
 }

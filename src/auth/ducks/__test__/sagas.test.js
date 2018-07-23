@@ -8,6 +8,8 @@ import {
   changeUserSaga,
   changePasswordSaga,
   activateUserSaga,
+  resetPasswordSaga,
+  resetPasswordConfirmSaga,
 } from '../sagas';
 import * as actions from '../actions';
 import * as types from '../types';
@@ -22,6 +24,8 @@ import {
   fetchChangeUser,
   fetchChangeUserPassword,
   fetchActivateUser,
+  fetchResetPassword,
+  fetchResetPasswordConfirm,
 } from '../api';
 
 
@@ -352,6 +356,68 @@ describe('SAGA activate user', () => {
     expect(saga.next().value).toEqual(call(fetchActivateUser,
       action.payload.uid, action.payload.token));
     expect(saga.throw('error').value).toEqual(put(actions.activateUserError('error')));
+    expect(saga.next().done).toEqual(true);
+  });
+});
+
+describe('SAGA reset password (request)', () => {
+  const action = {
+    type: types.RESET_PASSWORD,
+    email: 'test@test.ru',
+  };
+  it('valid data', () => {
+    const saga = resetPasswordSaga(action);
+    expect(saga.next().value).toEqual(put(actions.resetPasswordRequest()));
+    expect(saga.next().value).toEqual(call(fetchResetPassword, action.email));
+    const resp = { success: true };
+    expect(saga.next(resp).value).toEqual(put(actions.resetPasswordSuccess()));
+    expect(saga.next().done).toEqual(true);
+  });
+  it('no valid data', () => {
+    const saga = resetPasswordSaga(action);
+    expect(saga.next().value).toEqual(put(actions.resetPasswordRequest()));
+    expect(saga.next().value).toEqual(call(fetchResetPassword, action.email));
+    const errors = { email: ['Invalid'] };
+    const resp = { success: false, errors };
+    expect(saga.next(resp).value).toEqual(put(actions.resetPasswordError(errors)));
+    expect(saga.next().done).toEqual(true);
+  });
+  it('server/netvork error', () => {
+    const saga = resetPasswordSaga(action);
+    expect(saga.next().value).toEqual(put(actions.resetPasswordRequest()));
+    expect(saga.next().value).toEqual(call(fetchResetPassword, action.email));
+    expect(saga.throw('error').value).toEqual(put(actions.resetPasswordError('error')));
+    expect(saga.next().done).toEqual(true);
+  });
+});
+
+describe('SAGA reset password (confirm)', () => {
+  const action = {
+    type: types.RESET_PASSWORD_CONFIRM,
+    payload: { uid: 'MA', token: '23ddd-sdsdsd2222', new_password: '12345678' },
+  };
+  it('valid data', () => {
+    const saga = resetPasswordConfirmSaga(action);
+    expect(saga.next().value).toEqual(put(actions.resetPasswordConfirmRequest()));
+    expect(saga.next().value).toEqual(call(fetchResetPasswordConfirm, action.payload));
+    const resp = { success: true };
+    expect(saga.next(resp).value).toEqual(put(actions.resetPasswordConfirmSuccess()));
+    expect(saga.next().done).toEqual(true);
+  });
+  it('no valid data', () => {
+    const saga = resetPasswordConfirmSaga(action);
+    expect(saga.next().value).toEqual(put(actions.resetPasswordConfirmRequest()));
+    expect(saga.next().value).toEqual(call(fetchResetPasswordConfirm, action.payload));
+    const errors = { uid: ['Invalid'] };
+    const resp = { success: false, errors };
+    expect(saga.next(resp).value).toEqual(put(actions.resetPasswordConfirmError(errors)));
+    expect(saga.next().done).toEqual(true);
+  });
+  it('server/netvork error', () => {
+    const saga = resetPasswordConfirmSaga(action);
+    expect(saga.next().value).toEqual(put(actions.resetPasswordConfirmRequest()));
+    expect(saga.next().value).toEqual(call(fetchResetPasswordConfirm, action.payload));
+    expect(saga.throw('error').value).toEqual(put(actions.resetPasswordConfirmError('error')));
     expect(saga.next().done).toEqual(true);
   });
 });

@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
 import {
   Button,
   Form,
@@ -16,13 +15,13 @@ const styles = {
   },
 };
 
-class LoginForm extends Component {
+class ResetPasswordForm extends Component {
   checkAndSubmit = (e) => {
     const { form, submitForm } = this.props;
     e.preventDefault();
     form.validateFields((err, values) => {
       if (!err) {
-        submitForm(values.email, values.password);
+        submitForm(values.email);
       }
     });
   }
@@ -35,7 +34,7 @@ class LoginForm extends Component {
         <FormItem label="Электронный адрес">
           {getFieldDecorator('email', {
             rules: [{
-              type: 'email', message: 'Введите корректный email!',
+              type: 'email', message: 'Введите ваш email!',
             },
             {
               required: true, message: 'Это обязательное поле!',
@@ -44,26 +43,9 @@ class LoginForm extends Component {
             <Input type="email" prefix={<Icon type="mail" style={styles.iconPrefix} />} placeholder="Email" />,
           )}
         </FormItem>
-        <FormItem label="Пароль">
-          {getFieldDecorator('password', {
-            rules: [{
-              required: true, message: 'Это обязательное поле!',
-            }],
-          })(
-            <Input prefix={<Icon type="lock" style={styles.iconPrefix} />} type="password" placeholder="Пароль" />,
-          )}
-        </FormItem>
         <Button type="primary" htmlType="submit" onClick={this.checkAndSubmit}>
-          Вход
+          Отправить
         </Button>
-        <Link to="/auth/register">
-          <Button type="default">
-            Регистрация
-          </Button>
-        </Link>
-        <Link to="/auth/reset" style={{ marginLeft: 10, fontSize: 12 }}>
-          Забыли пароль?
-        </Link>
         <Divider />
       </Form>
     );
@@ -71,4 +53,4 @@ class LoginForm extends Component {
 }
 
 
-export default Form.create()(LoginForm);
+export default Form.create()(ResetPasswordForm);

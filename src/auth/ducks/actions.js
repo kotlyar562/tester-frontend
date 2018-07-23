@@ -81,10 +81,46 @@ export const activateUserError = errors => ({
   errors,
 });
 
+export const resetPasswordRequest = () => ({
+  type: types.RESET_PASSWORD_REQUEST,
+});
+
+export const resetPasswordSuccess = () => ({
+  type: types.RESET_PASSWORD_SUCCESS,
+});
+
+export const resetPasswordError = errors => ({
+  type: types.RESET_PASSWORD_ERROR,
+  errors,
+});
+
+export const resetPasswordConfirmRequest = () => ({
+  type: types.RESET_PASSWORD_CONFIRM_REQUEST,
+});
+
+export const resetPasswordConfirmSuccess = () => ({
+  type: types.RESET_PASSWORD_CONFIRM_SUCCESS,
+});
+
+export const resetPasswordConfirmError = errors => ({
+  type: types.RESET_PASSWORD_CONFIRM_ERROR,
+  errors,
+});
+
 export const logoutUserSuccess = () => ({
   type: types.LOGOUT_SUCCESS,
 });
 
+
+export const resetPasswordConfirm = payload => ({
+  type: types.RESET_PASSWORD_CONFIRM,
+  payload,
+});
+
+export const resetPassword = email => ({
+  type: types.RESET_PASSWORD,
+  email,
+});
 
 export const activateUser = (uid, token) => ({
   type: types.ACTIVATE_USER,

@@ -17,7 +17,7 @@ const SuccessPage = props => (
       {props.buttons ? (
         <div>
           <Button>
-            <Link to="/user/profile" className="action-button">
+            <Link to="/user" className="action-button">
               <Icon type="user" /> Панель управления
             </Link>
           </Button>

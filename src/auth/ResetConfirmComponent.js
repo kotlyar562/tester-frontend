@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import shortid from 'shortid';
 import {
   Row,
   Col,
@@ -35,7 +36,7 @@ const ResetConfirmComponent = (props) => {
           Установка нового пароля
         </h2>
         {auth.errors && auth.errors.toArray().map(
-          (item, n) => <Alert key={'alerterr'+n} message={item} type="error" />
+          item => <Alert key={shortid.generate()} message={item} type="error" />,
         )}
         <Spin
           wrapperClassName="spin_transparent"

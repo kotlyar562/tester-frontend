@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import shortid from 'shortid';
 import {
   Button,
   Form,
@@ -20,7 +21,7 @@ const styles = {
 
 class RegisterForm extends Component {
   checkPassword = (rule, value, callback) => {
-    const { form } = { ...this.props };
+    const { form } = this.props;
     if (value && value !== form.getFieldValue('password')) {
       callback('Введенные пароли не совпадают!');
     } else {
@@ -63,7 +64,7 @@ class RegisterForm extends Component {
             <div>
               <Input type="email" name="email" prefix={<Icon type="mail" style={styles.iconPrefix} />} placeholder="Email" />
               {auth.errors && auth.errors.get('email') && auth.errors.get('email').map(
-                (item, n) => <Alert key={'alerte'+n} message={item} type="error" />
+                item => <Alert key={shortid.generate()} message={item} type="error" />,
               )}
             </div>,
           )}
